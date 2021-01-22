@@ -25,14 +25,15 @@ db.sequelize = sequelize;
 
 db.user = require('./components/user/model.user')(sequelize, Sequelize);
 
+
 db.initial = async () => {
   const bcrypt = require('bcryptjs');
-  const bcrypt_salt = bcrypt.genSaltSync(10);
+  const bcrypt_salt = bcrypt.genSaltSync(+process.env.AUTH_SALT_LENGTH);
   try {
     await db.sequelize.sync({force: true});
     console.log('Drop and Resync Db');
 
-    //create test data
+    //create test user data
     await db.user.create({
       email: 'ivan@qqq.ru',
       password: bcrypt.hashSync("ivan", bcrypt_salt)

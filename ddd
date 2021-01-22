@@ -1,0 +1,27 @@
+[33mcommit da8263d8049aa168757905422e272291a648c040[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Oleg Trubin <otrubin@gmail.com>
+Date:   Fri Jan 15 20:20:28 2021 +0300
+
+    Revert "Revert "reverted commit""
+    
+    This reverts commit cef15b084a974f48d51b39ea64b87965b3ebbf0a.
+
+[33mcommit cef15b084a974f48d51b39ea64b87965b3ebbf0a[m
+Author: Oleg Trubin <otrubin@gmail.com>
+Date:   Fri Jan 15 11:49:33 2021 +0300
+
+    Revert "reverted commit"
+    
+    This reverts commit 59edbd47425edd61f706d19ffaedad5bde887afc.
+
+[33mcommit 59edbd47425edd61f706d19ffaedad5bde887afc[m
+Author: Oleg Trubin <otrubin@gmail.com>
+Date:   Fri Jan 15 11:47:53 2021 +0300
+
+    reverted commit
+
+[33mcommit 24bab24f8e99fdbc56568c95f5b49d17abe0a87c[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Oleg Trubin <otrubin@gmail.com>
+Date:   Sat Jan 9 21:41:01 2021 +0300
+
+    Initial commit
