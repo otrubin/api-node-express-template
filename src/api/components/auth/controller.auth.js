@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
         responseHelper.makeErrorObject("auth_user_not_found")
       );
     }
-    if (!userService.isValidPassword(password, user)) {
+    if (!authServise.isValidPassword(password, user)) {
       return res.status(401).send(
         responseHelper.makeErrorObject("auth_invalid_password")
       );

@@ -24,27 +24,16 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require('./components/user/model.user')(sequelize, Sequelize);
+db.passwordReset = require('./components/passwordReset/model.passwordReset')(sequelize, Sequelize);
+
 
 
 db.initial = async () => {
-  const bcrypt = require('bcryptjs');
-  const bcrypt_salt = bcrypt.genSaltSync(+process.env.AUTH_SALT_LENGTH);
-  try {
-    await db.sequelize.sync({force: true});
-    console.log('Drop and Resync Db');
-
-    //create test user data
-    await db.user.create({
-      email: 'ivan@qqq.ru',
-      password: bcrypt.hashSync("ivan", bcrypt_salt)
-    });
-    await db.user.create({
-      email: 'admin@qqq.ru',
-      password: bcrypt.hashSync("admin", bcrypt_salt)
-    });
-  } catch (error) {
-    console.log(error);
+  if(process.env.NODE_ENV !== "development") {
+    return;
   }
+  const initService = require('./services/init.service');
+  await initService.initUserTable(db);
 }
 
 module.exports = db;

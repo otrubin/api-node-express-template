@@ -14,30 +14,45 @@ async function getUser(clauses) {
   return user;
 }
 
-async function registerUser(userData) {
+function makePasswordHash(password) {
   const bcrypt = require('bcryptjs');
   const bcrypt_salt = bcrypt.genSaltSync(+process.env.AUTH_SALT_LENGTH);
+  return bcrypt.hashSync(password, bcrypt_salt);
+}
 
+async function registerUser(userData) {
   const user = db.user.create({
     email: userData.email,
-    password: bcrypt.hashSync(userData.password, bcrypt_salt)
+    password: makePasswordHash(userData.password)
   });
   return user;
 }
 
-function isValidPassword(password, user) {
-  const bcrypt = require('bcryptjs');
-  const res = bcrypt.compareSync(
-    password,
-    user.password
-  );
-  return res;
+async function getUserList(params = {}) {
+  return users = await db.user.findAll(params);
 }
+
+/**
+ * Меняем пароль у пользователя с переданным email
+ * @param {String} email
+ * @param {String} newPassword
+ */
+async function changePassword(email, newPassword) {
+
+  const passwordHash = makePasswordHash(newPassword);
+  await db.user.update({password: passwordHash }, {
+    where: {
+      email
+    }
+  });
+}
+
 
 const service = {
   getUserFromEmail,
   getUser,
   registerUser,
-  isValidPassword
+  getUserList,
+  changePassword,
 };
 module.exports = service;

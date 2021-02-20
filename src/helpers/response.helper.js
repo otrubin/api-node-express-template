@@ -4,8 +4,8 @@ function makeErrorObject(key) {
   return {
     status: "error",
     error: {
-      code: errorConfig[key].code,
-      message: errorConfig[key].message,
+      code: errorConfig[key].code || errorConfig.unknown_error.code,
+      message: errorConfig[key].message || errorConfig.unknown_error.message,
     }
   };
 }
@@ -23,7 +23,7 @@ function makeServerErrorObject(message) {
 function makeSuccessObject(payloadObject) {
   return {
     status: "ok",
-    result: payloadObject
+    result: payloadObject || {}
   };
 }
 
