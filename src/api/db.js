@@ -25,6 +25,8 @@ db.sequelize = sequelize;
 
 db.user = require('./components/user/model.user')(sequelize, Sequelize);
 db.passwordReset = require('./components/passwordReset/model.passwordReset')(sequelize, Sequelize);
+db.emailVerify = require('./components/emailVerify/model.emailVerify')(sequelize, Sequelize);
+db.tag = require('./components/tag/model.tag')(sequelize, Sequelize);
 
 
 

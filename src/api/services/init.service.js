@@ -1,5 +1,18 @@
 const bcrypt = require('bcryptjs');
 
+async function makeTags(db, userId) {
+  const titles = [
+    'важное', 'дизайн', 'сайты', 'курсы', 'php'
+  ];
+  titles.forEach(async (title) => {
+    await db.tag.create({
+      accountId: userId,
+      title: userId + title,
+      creatorId: userId,
+    });
+  });
+}
+
 async function initUserTable(db) {
   const bcrypt_salt = bcrypt.genSaltSync(+process.env.AUTH_SALT_LENGTH);
   const pass = bcrypt.hashSync("123", bcrypt_salt);
@@ -7,11 +20,14 @@ async function initUserTable(db) {
     await db.sequelize.sync({force: true});
     console.log('Drop and Resync Db');
 
-    //create test admin data
-    await db.user.create({
+    console.log(Date.now());
+    let user = await db.user.create({
       email: 'otrubin@gmail.com',
-      password: pass
+      password: pass,
+      emailVerify: Date.now(),
     });
+
+    await makeTags(db, user.id);
 
     for (let i = 1; i < 11; i++) {
       await db.user.create({

@@ -1,11 +1,12 @@
 const errorConfig = require('../config/errors.config');
 
-function makeErrorObject(key) {
+function makeErrorObject(key, payload) {
+  const str = payload === undefined ? '' : String(payload);
   return {
     status: "error",
     error: {
       code: errorConfig[key].code || errorConfig.unknown_error.code,
-      message: errorConfig[key].message || errorConfig.unknown_error.message,
+      message: errorConfig[key].message + str || errorConfig.unknown_error.message,
     }
   };
 }

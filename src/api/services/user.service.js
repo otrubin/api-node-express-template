@@ -4,6 +4,10 @@ async function getUserFromEmail(email) {
   return await getUser({email});
 }
 
+async function getUserFromId(id) {
+  return await db.user.findByPk(id);
+}
+
 /**
  *
  * @param {object} clauses
@@ -29,7 +33,7 @@ async function registerUser(userData) {
 }
 
 async function getUserList(params = {}) {
-  return users = await db.user.findAll(params);
+  return await db.user.findAll(params);
 }
 
 /**
@@ -47,12 +51,28 @@ async function changePassword(email, newPassword) {
   });
 }
 
+/**
+ * Подтверждаем или сбрасываем верификацию email
+ * @param {String} email
+ * @param {Boolean} isVerificated
+ */
+async function setEmailVerificated(email, isVerificated) {
+  const value = isVerificated ? Date.now() : null;
+  await db.user.update({emailVerify: value }, {
+    where: {
+      email
+    }
+  });
+}
+
 
 const service = {
   getUserFromEmail,
+  getUserFromId,
   getUser,
   registerUser,
   getUserList,
   changePassword,
+  setEmailVerificated
 };
 module.exports = service;

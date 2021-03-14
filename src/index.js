@@ -4,10 +4,12 @@ const db = require('./api/db');
 
 const PORT = process.env.PORT || 3000;
 
-// db.initial(); //! уничтожит все изменения в базе
+// // // db.initial(); //! уничтожит все изменения в базе
 
 const { emailToLowerString } = require('./api/middleware/global.middleware');
 app.use(emailToLowerString);
+
+const auth = require('./api/middleware/auth.middleware')(app);
 
 // simple route
 app.get("/", (req, res) => {
@@ -15,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 //all routes
-require('./api/routes')(app);
+require('./api/routes')(app, auth.authentication);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

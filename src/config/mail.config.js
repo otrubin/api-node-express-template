@@ -19,6 +19,10 @@ module.exports = {
     passwordReset: {
       subject: 'passwordResetSubject.hbs',
       body: 'passwordResetBody.hbs'
+    },
+    emailVerify: {
+      subject: 'emailVerifySubject.hbs',
+      body: 'emailVerifyBody.hbs'
     }
   }
 }

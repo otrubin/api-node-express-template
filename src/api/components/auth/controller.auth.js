@@ -1,9 +1,10 @@
 const userService = require('../../services/user.service');
 const authServise = require('../../services/auth.service');
 const responseHelper = require('../../../helpers/response.helper');
+const emailVerifyController = require('../emailVerify/controller.emailVerify');
 
 exports.register = async (req, res) => {
-  const {email, password} = req.body;
+  const {email, password, verifyLink} = req.body;
   try {
     let user = await userService.getUserFromEmail(email);
     if (user) {
@@ -15,9 +16,35 @@ exports.register = async (req, res) => {
       email,
       password
     });
-    res.status(201).json(
-      responseHelper.makeSuccessObject({id: user.id})
-    );
+    if(verifyLink) {
+      const sendLetterResult = await emailVerifyController.sendVerifyLetter(email, verifyLink);
+      if (sendLetterResult.status >= 200 && sendLetterResult.status < 300) {
+        // если письмо верификации email ушло без ошибок
+        res.status(201).json(
+          responseHelper.makeSuccessObject({
+            userId: user.id,
+            sendVerifyLetter: true,
+            sendVerifyError: ''
+          })
+        );
+      }else{
+        res.status(201).json(
+          // если при попытке отправки письма верификации были ошибки
+          responseHelper.makeSuccessObject({
+            userId: user.id,
+            sendVerifyLetter: true,
+            sendVerifyError: sendLetterResult.payload.error.message
+          })
+        );
+      }
+    } else {
+      res.status(201).json(
+        responseHelper.makeSuccessObject({
+          userId: user.id,
+          sendVerifyLetter: false
+        })
+      );
+    }
   } catch (error) {
     res.status(500).send(
       responseHelper.makeServerErrorObject(error.message)
@@ -42,8 +69,8 @@ exports.login = async (req, res) => {
     const token = authServise.makeToken({ id: user.id });
     res.status(200).send(responseHelper.makeSuccessObject({
       id: user.id,
-      email: user.email,
-      accessToken: token
+      // email: user.email, //! ???
+      accessToken: token,
     }));
   } catch (error) {
     res.status(500).send(

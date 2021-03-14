@@ -1,6 +1,6 @@
 const controller = require('./controller.auth');
 
-module.exports = function(app) {
+module.exports = function(app, auth) {
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
